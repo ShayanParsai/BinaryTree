@@ -1,5 +1,6 @@
 package com.company;
 
+import javax.management.openmbean.InvalidKeyException;
 import javax.management.openmbean.KeyAlreadyExistsException;
 
 public class BinaryTree {
@@ -33,6 +34,12 @@ public class BinaryTree {
 
         } else if (valueToRemove > currentNode.value && currentNode.hasRightChild()) {
             removeRecursive(currentNode.right, currentNode, valueToRemove);
+
+        } else if (valueToRemove != currentNode.value) {
+            throw new InvalidKeyException(String.format("The value '%s' does not exist", valueToRemove));
+
+        } else if (!currentNode.hasChildren() && parentNode == null) { // Is only node?
+            root = null;
 
         } else {
 
@@ -94,7 +101,6 @@ public class BinaryTree {
                     parentNode.right = null;
                 else
                     parentNode.left = null;
-
             }
         }
     }
@@ -205,6 +211,10 @@ public class BinaryTree {
 
         boolean hasTwoChildren() {
             return hasLeftChild() && hasRightChild();
+        }
+
+        boolean hasChildren() {
+            return hasLeftChild() || hasRightChild();
         }
 
         @Override
